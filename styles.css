@@ -1,0 +1,519 @@
+:root {
+    /* พื้นหลังสีครีม (ตามโจทย์) */
+    --base-cream: #f5f5dc; 
+    /* กำหนดสีรุ้งเป็น Custom Property */
+    --rainbow-colors: #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3;
+    /* สีของคลื่น: เพิ่มความทึบ (alpha) ให้ชัดเจนขึ้น */
+    --wave-color-dark: rgba(200, 180, 150, 0.4); 
+    --wave-color-light: rgba(255, 255, 255, 0.3); 
+}
+
+/* ใช้ฟอนต์ Sarabun และกำหนดขนาดจอ */
+html {
+    scroll-behavior: smooth;
+    scroll-snap-type: y mandatory; 
+    font-family: 'Sarabun', sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Sarabun', sans-serif;
+    background-color: var(--base-cream); 
+    overflow-x: hidden;
+    position: relative; 
+}
+
+/* Overlay สำหรับทำให้เว็ปค่อยมืดลงตามขอบ (Vignette Effect) */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* ใช้ Radial Gradient สีดำโปร่งใสที่ตรงกลางจางและเข้มขึ้นที่ขอบ */
+    background: radial-gradient(circle at center, transparent 70%, rgba(0, 0, 0, 0.4) 100%);
+    pointer-events: none; /* เพื่อให้สามารถคลิกเนื้อหาด้านหลังได้ */
+    z-index: 999; /* ให้ทับอยู่บนทุกองค์ประกอบยกเว้น Navbar */
+}
+
+
+/* Animation พื้นหลังสีครีมที่ค่อยๆ เข้มอ่อนไปเรื่อย */
+@keyframes background-pulse {
+    0% { background-color: #f5f5dc; } /* ครีมอ่อน */
+    50% { background-color: #eee8aa; } /* ครีมเข้มขึ้นนิดนึง (Pale Goldenrod) */
+    100% { background-color: #f5f5dc; }
+}
+
+/* 🌊 Keyframes: Animation พื้นหลังคลื่น (Wave Motion) */
+@keyframes wave-motion {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
+}
+
+/* --- Global Section Settings (รวมเอฟเฟกต์คลื่นและพื้นหลังนุ่มนวล) --- */
+.hero-section, .content-section, .schedule-section {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 80px; 
+    box-sizing: border-box;
+    scroll-snap-align: start; 
+    scroll-snap-stop: always;
+    
+    background-color: var(--base-cream);
+    
+    /* เอฟเฟกต์คลื่น */
+    background-image: 
+        radial-gradient(circle at 10% 20%, var(--wave-color-dark) 0%, transparent 40%),
+        radial-gradient(circle at 70% 80%, var(--wave-color-light) 0%, transparent 50%);
+    background-size: 200% 200%; 
+    animation: background-pulse 20s infinite alternate, wave-motion 40s linear infinite alternate;
+}
+
+/* จำกัดความกว้างเนื้อหา */
+.section-title, .info-card, .gallery-grid-wrapper, .contact-icons, .table-wrapper {
+    width: clamp(1140px, 80vw, 1600px); 
+    max-width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+    margin-bottom: 40px;
+}
+
+/* --- Navbar --- */
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 1rem 5%;
+    display: flex;
+    justify-content: flex-end; 
+    align-items: center;
+    background: rgba(0, 0, 0, 0.7); 
+    z-index: 1000;
+    box-sizing: border-box;
+    backdrop-filter: blur(5px);
+}
+
+nav a {
+    color: white; 
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.2rem;
+    transition: color 0.3s;
+}
+
+nav .menu {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav .menu a:hover {
+    color: #87ddfe;
+}
+
+/* --- Animation สีรุ้งและเรืองแสง (50%) --- */
+@keyframes rainbow-shift {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+}
+
+@keyframes text-glow {
+    0% { 
+        /* ความเข้ม 50% */
+        text-shadow: 
+            0 0 3px rgba(255, 255, 255, 0.3), 
+            0 0 6px rgba(255, 100, 100, 0.3); 
+    }
+    50% { 
+        /* ความเข้ม 50% */
+        text-shadow: 
+            0 0 8px rgba(255, 255, 255, 0.5), 
+            0 0 20px rgba(0, 255, 0, 0.5); 
+    }
+    100% { 
+        /* ความเข้ม 50% */
+        text-shadow: 
+            0 0 3px rgba(255, 255, 255, 0.3), 
+            0 0 6px rgba(255, 100, 100, 0.3); 
+    }
+}
+
+/* --- Hero Section (ปรับรูปภาพ) --- */
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 100px;
+}
+
+/* หัวข้อ "ข้อมูลเชิงอัตชีวประวัติ" */
+.main-title {
+    /* ลดขนาดฟอนต์ลงครึ่งหนึ่ง (12.5vh) และอยู่บรรทัดเดียวกัน */
+    font-size: 12.5vh; 
+    font-weight: 900;
+    margin-bottom: 50px; 
+    text-align: center;
+    line-height: 1; 
+    white-space: nowrap; 
+
+    /* Animation */
+    animation: rainbow-shift 10s linear infinite, text-glow 4s ease-in-out infinite alternate;
+}
+
+.rainbow-text {
+    background: linear-gradient(to right, var(--rainbow-colors));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+/* รูปภาพและชื่อ */
+.profile-container {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    margin-bottom: 5px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rotating-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid rgba(0, 0, 0, 0.1);
+    animation: none; /* ลบ animation พื้นฐาน */
+    transition: transform 0.3s ease; /* ใช้ transition ควบคุมการซูม/หมุนกลับ */
+    
+    /* ตั้งค่าเริ่มต้นให้คงที่ */
+    transform: rotate(0deg) scale(1); 
+}
+
+/* [NEW KEYFRAMES] กำหนดให้หมุน 360 องศาต่อเนื่องเมื่อ Hover */
+@keyframes spin-on-hover {
+    from { transform: rotate(0deg) scale(1.3); } /* เริ่มที่ 0 องศาพร้อมซูม */
+    to { transform: rotate(360deg) scale(1.3); } /* หมุนเต็มรอบ */
+}
+
+/* Hover Effect รูปภาพ: หมุนต่อเนื่อง 360 องศา และซูม */
+.rotating-image:hover {
+    animation: spin-on-hover 1s linear infinite;
+    transform: scale(1.3); 
+}
+
+
+/* [MODIFIED] ข้อความใต้ภาพ "ข้อมูลเชิงอัตชีวประวัติ" ถูกลบออกจาก HTML แต่สไตล์ยังคงอยู่ (ในกรณีที่ต้องการใช้ภายหลัง) */
+.profile-caption {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #444;
+    margin-bottom: 15px;
+    display: none; /* ซ่อนไว้เนื่องจากถูกลบออกจาก HTML แล้ว */
+}
+
+.name-display {
+    display: flex;
+    gap: 5px;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #000;
+    min-height: 40px; 
+}
+
+.bounce-char {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(-50px);
+    transition: transform 0.3s, opacity 0.3s, color 0.3s, text-shadow 0.3s; /* [MODIFIED] เพิ่ม transition สำหรับการหมุน */
+}
+
+/* [NEW KEYFRAMES] สำหรับการหมุนตัวอักษร */
+@keyframes char-rotate {
+    0% { transform: rotate(0deg) scale(1); }
+    100% { transform: rotate(15deg) scale(1.1); }
+}
+
+/* [NEW] คลาสสำหรับการหมุนตัวอักษรเมื่อเมาส์ชี้รูป */
+.char-is-rotating {
+    animation: char-rotate 0.3s ease-out forwards;
+    color: #007bff; /* สีเปลี่ยนเมื่อหมุน */
+    text-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+/* --- Global Section Title (หัวข้อทุกหัวข้อ) --- */
+.section-title {
+    font-size: 12.5vh; 
+    color: #333; 
+    margin-bottom: 50px;
+    text-align: center;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap; 
+    
+    /* นำสไตล์สีรุ้งและเรืองแสงมาใช้ซ้ำ */
+    background: linear-gradient(to right, var(--rainbow-colors));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: rainbow-shift 10s linear infinite, text-glow 4s ease-in-out infinite alternate;
+}
+
+/* --- Personal Info Section (ขยายฟอนต์ข้อมูลส่วนตัว) --- */
+.info-card {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px; 
+    padding: 40px; 
+    background: rgba(255, 255, 255, 0.8); 
+    border-radius: 20px; 
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15); 
+    backdrop-filter: blur(5px);
+}
+
+.info-group {
+    padding: 20px; 
+    border-left: 7px solid #007bff; 
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+}
+
+.info-group h3 {
+    margin-top: 0;
+    color: #007bff;
+}
+
+/* ขยายขนาดฟอนต์ของข้อมูลด้านในและเป็นตัวหนา */
+.info-group ul, 
+.info-group p,
+.info-group li {
+    margin-bottom: 0;
+    color: #444;
+    font-size: 1.15rem; /* ขยายขนาดฟอนต์ */
+    font-weight: 700; /* ทำให้เป็นตัวหนา */
+    line-height: 1.6;
+}
+.info-group ul {
+    list-style: none; /* ลบ bullet point เดิม */
+    padding: 0;
+}
+.info-group li::before {
+    content: "•"; /* เพิ่ม bullet point แบบกำหนดเอง */
+    color: #007bff;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+    font-weight: 900;
+}
+
+/* --- Gallery Section --- */
+.gallery-grid-wrapper {
+    overflow: hidden;
+    padding: 20px 0;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); 
+    gap: 20px;
+    animation: gallery-scroll 15s linear infinite; 
+    width: 200%; 
+}
+
+.gallery-grid:hover {
+    animation-play-state: paused;
+}
+
+@keyframes gallery-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); } 
+}
+
+.gallery-item {
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s;
+}
+
+.gallery-item:hover {
+    transform: scale(1.05);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+
+/* --- Contact Section (ขยาย Icon Instragram Facebook Github ให้ใหญ่ขึ้น) --- */
+.contact-icons {
+    display: flex;
+    justify-content: center;
+    gap: 100px; /* ขยายระยะห่างระหว่าง Icon */
+    padding: 50px 0;
+}
+
+.contact-icon-link {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #333;
+    transition: color 0.3s;
+    text-decoration: none;
+}
+
+.contact-icon-link i {
+    font-size: 7rem; /* ขยายขนาด Icon เป็น 7rem */
+    transition: transform 0.5s ease, color 0.3s;
+    padding: 0; 
+    border-radius: 0; 
+    background-color: transparent; 
+    box-shadow: none; 
+}
+
+/* กำหนดสีเริ่มต้นของ Icon */
+.ig-color { color: #E1306C; } 
+.github-color { color: #333; } 
+.fb-color { color: #1877F2; } 
+
+/* Icon หมุน 360 องศาเมื่อเมาส์ชี้และหยุดเมื่อเอาเมาส์ออก */
+.contact-icon-link:hover .icon-rotate {
+    animation: rotate-360 1s linear infinite; 
+    color: #000; 
+}
+
+.contact-icon-link:not(:hover) .icon-rotate {
+    animation: none; /* ยกเลิก Animation เมื่อเมาส์ออก */
+}
+
+@keyframes rotate-360 {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.icon-info {
+    position: absolute;
+    bottom: -35px; 
+    font-size: 1rem; 
+    background-color: #333;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.contact-icon-link:hover .icon-info {
+    opacity: 1;
+    transform: translateY(-5px);
+}
+
+/* --- Schedule Section (ตารางสอน) --- */
+.schedule-section {
+    background-color: #333;
+    color: white;
+}
+
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1400px; 
+    table-layout: fixed;
+    font-size: 1.1rem; 
+}
+
+.schedule-table th, .schedule-table td {
+    border: 2px solid #555; 
+    padding: 12px; 
+    text-align: center;
+    vertical-align: middle;
+    line-height: 1.4;
+}
+
+.schedule-table th {
+    background-color: #555;
+    font-weight: bold;
+    color: #fff;
+}
+
+.schedule-table td {
+    background-color: #444;
+}
+
+.schedule-table tr:nth-child(even) td {
+    background-color: #3a3a3a;
+}
+
+.schedule-table td:first-child {
+    background-color: #555;
+    font-weight: bold;
+}
+
+.schedule-table .lunch {
+    background-color: #777;
+    font-weight: bold;
+}
+
+/* --- Footer --- */
+footer {
+    width: 100%;
+    padding: 20px 0;
+    text-align: center;
+    background-color: #222;
+    color: #bbb;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+/* --- Responsive for smaller screens --- */
+@media (max-width: 1140px) {
+    .info-card {
+        grid-template-columns: 1fr;
+        padding: 20px;
+    }
+    nav {
+        flex-direction: column;
+        padding: 1rem 5%;
+    }
+    nav .menu {
+        margin-top: 10px;
+        gap: 1rem;
+    }
+    .schedule-table {
+        min-width: 1000px; 
+        font-size: 0.9rem;
+    }
+    /* ปรับขนาดหัวข้อสำหรับจอเล็กให้เล็กลงแต่ยังคงใหญ่ */
+    .main-title, .section-title {
+        font-size: 8vh; 
+        white-space: normal; 
+    }
+    /* ปรับฟอนต์ข้อมูลส่วนตัวในจอเล็ก */
+    .info-group p, .info-group li {
+        font-size: 1rem;
+    }
+}
